@@ -30,4 +30,4 @@ pryzmtestnet:
 
 ## Live Demo
 
-- [Pryzm yield](https://pryzm-yield-test-qfdx9zdd6-ghassan-aldarwishs-projects.vercel.app/)
+- [Pryzm yield](https://pryzm.vercel.app/)

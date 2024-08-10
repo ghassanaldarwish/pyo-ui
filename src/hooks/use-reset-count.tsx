@@ -9,10 +9,11 @@ export default function useResetCount() {
   const { getSigningCosmWasmClient, address }: any = useChain(CHAIN_NAME);
 
   const mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (payload: { count: number }) => {
       if (!address) {
         return;
       }
+      console.log("Payload:", payload);
       const client = await getSigningCosmWasmClient();
       const queryClient = new CwPryzmClient(client, address, CONTRACT_ADDRESS);
       const fee = {
@@ -23,7 +24,7 @@ export default function useResetCount() {
       console.log("Contract Address:", CONTRACT_ADDRESS);
       console.log("Fee:", fee);
 
-      return await queryClient.reset({ count: 0 }, fee);
+      return await queryClient.reset(payload, fee);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["count"] }),
   });

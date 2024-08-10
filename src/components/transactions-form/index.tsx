@@ -11,6 +11,7 @@ import { useChain } from "@cosmos-kit/react";
 import { CHAIN_NAME } from "@/config";
 import { WalletStatus } from "cosmos-kit";
 import { Wallet } from "../wallet";
+import WithdrawAmount from "../withdraw-amount";
 
 export default function TransactionsForm() {
   const { status } = useChain(CHAIN_NAME);
@@ -33,8 +34,17 @@ export default function TransactionsForm() {
     incrementMutation.mutateAsync();
   };
 
-  const reset = async () => {
-    resetMutation.mutateAsync();
+  const reset = async (e: any) => {
+    e.preventDefault();
+
+    const amount: number = Number(e.target.amount.value || 0);
+
+    if (amount > count) {
+      alert("Amount should be less than or equal to the current balance");
+      return;
+    }
+
+    resetMutation.mutateAsync({ count: amount });
   };
   return WalletStatus.Connected === status ? (
     <Card x-chunk="dashboard-01-chunk-0" className="w-80">
@@ -48,9 +58,11 @@ export default function TransactionsForm() {
           <Button onClick={increment} className="w-full mt-4">
             Deposit
           </Button>
-          <Button onClick={reset} className="w-full mt-4" variant="secondary">
-            Withdraw
-          </Button>
+          <WithdrawAmount
+            amount={count}
+            onSubmit={reset}
+            className="w-full mt-4"
+          />
         </div>
       </CardContent>
     </Card>

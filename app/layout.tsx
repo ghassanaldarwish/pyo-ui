@@ -37,12 +37,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ChainProvider>
-            <QueryProvider>
+          <QueryProvider>
+            <ChainProvider>
               {children}
               <Toaster position="top-right" />
-            </QueryProvider>
-          </ChainProvider>
+            </ChainProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -18,16 +18,10 @@ import {
   ButtonNotExist,
   ButtonRejected,
 } from "./Connect";
-import {
-  useCwPryzmGetCountQuery,
-  useCwPryzmIncrementMutation,
-} from "@/config/contracts/CwPryzm.react-query";
-import { useEffect, useState } from "react";
-import {
-  CwPryzmClient,
-  CwPryzmQueryClient,
-} from "@/config/contracts/CwPryzm.client";
-import { CONTRACT_ADDRESS } from "@/config/defaults";
+
+import useCount from "@/hooks/use-count";
+import useIncrementCount from "@/hooks/use-increment-count";
+import useResetCount from "@/hooks/use-reset-count";
 
 export function Wallet() {
   const {
@@ -39,9 +33,21 @@ export function Wallet() {
     message,
     connect,
     openView,
-    getCosmWasmClient,
-    getSigningStargateClient,
   } = useChain(CHAIN_NAME);
+
+  const { data: countData, isLoading, isError }: any = useCount();
+  const incrementMutation = useIncrementCount();
+
+  const resetMutation = useResetCount();
+  const count = countData?.count;
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {isError?.message}</span>;
+  }
 
   const ConnectButton = {
     [WalletStatus.Connected]: <ButtonConnected onClick={openView} />,
@@ -51,63 +57,15 @@ export function Wallet() {
     [WalletStatus.Rejected]: <ButtonRejected onClick={connect} />,
     [WalletStatus.NotExist]: <ButtonNotExist onClick={openView} />,
   }[status] || <ButtonConnect onClick={connect} />;
-
-  const [count, setCount] = useState(0);
-
-  // const { cwPryzmQueryClient, cwPryzmClient } = useContracts();
-  // // const mutation = useCwPryzmIncrementMutation();
-
-  // console.log("cwPryzmQueryClient", cwPryzmQueryClient);
-  // console.log("cwPryzmClient", cwPryzmClient);
-
-  useEffect(() => {
-    getCosmWasmClient().then(async (cosmWasmClient: any) => {
-      if (!cosmWasmClient) {
-        return;
-      }
-
-      const pryzmClient = new CwPryzmQueryClient(
-        cosmWasmClient,
-        CONTRACT_ADDRESS
-      );
-      // console.log("pryzmClient", pryzmClient);
-      // console.log("pryzmClient.getCount", await pryzmClient.getCount());
-      setCount((await pryzmClient.getCount()).count);
-      // if (pryzmClient) {
-      //   console.log("pryzmClient.getCount()", await pryzmClient.getCount());
-      // }
-      // console.log("pryzmClient", pryzmClient);
-    });
-
-    // async function fet() {
-    //   // const res = await cwPryzmClient?.getCount();
-    //   // console.log("counter SC", res);
-    //   const client = new CwPryzmClient(getSigningCosmWasmClient, address, CONTRACT_ADDRESS)
-    // }
-    // if (CwPryzmClient) {
-    //   fet();
-    // }
-  }, [getCosmWasmClient]);
-
   const increment = async () => {
-    const signingCosmWasmClient = await getSigningStargateClient();
-    if (!signingCosmWasmClient) {
-      return;
-    }
-    const pryzmClient = new CwPryzmClient(
-      // @ts-ignore
-      signingCosmWasmClient,
-      address,
-      CONTRACT_ADDRESS
-    );
-
-    if (!pryzmClient) {
-      return;
-    }
-
-    console.log("increment ?", pryzmClient.increment());
+    console.log("increment");
+    incrementMutation.mutateAsync();
   };
 
+  const reset = async () => {
+    console.log("resetMutation");
+    resetMutation.mutateAsync();
+  };
   return (
     <div>
       <Chain
@@ -115,6 +73,10 @@ export function Wallet() {
         logo={getChainLogo(chain.chain_name)!}
       ></Chain>
       <Button onClick={increment}>Increment</Button>
+      <br />
+      <br />
+
+      <Button onClick={reset}>Reset</Button>
       {count && <div>Counter from SC state: {count}</div>}
       {username ? <User name={username} /> : null}
       {address ? <div className="border p-2">{address}</div> : null}

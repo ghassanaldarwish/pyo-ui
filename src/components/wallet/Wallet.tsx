@@ -13,9 +13,23 @@ import {
   ButtonNotExist,
   ButtonRejected,
 } from "./Connect";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 export function Wallet() {
-  const { status, address, connect, openView } = useChain(CHAIN_NAME);
+  const { status, address, connect, openView, message, wallet } =
+    useChain(CHAIN_NAME);
+
+  useEffect(() => {
+    if (
+      [WalletStatus.Connected].includes(status) &&
+      ![WalletStatus.Connecting].includes(status)
+    ) {
+      toast("Connected to:", {
+        description: address,
+      });
+    }
+  }, [status, address]);
 
   const ConnectButton = {
     [WalletStatus.Connected]: (
@@ -27,6 +41,10 @@ export function Wallet() {
     [WalletStatus.Rejected]: <ButtonRejected onClick={connect} />,
     [WalletStatus.NotExist]: <ButtonNotExist onClick={openView} />,
   }[status] || <ButtonConnect onClick={connect} />;
+
+  if ([WalletStatus.Error, WalletStatus.Rejected].includes(status)) {
+    toast.error(`${wallet?.prettyName}: ${message}`);
+  }
 
   return ConnectButton;
 }

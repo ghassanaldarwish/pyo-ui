@@ -3,7 +3,8 @@ import { CwPryzmClient } from "@/config/contracts/CwPryzm.client";
 import { useChain } from "@cosmos-kit/react";
 import { CHAIN_NAME, CONTRACT_ADDRESS } from "@/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { toast } from "sonner";
+import { Loader } from "lucide-react";
 export default function useResetCount() {
   const queryClient = useQueryClient();
   const { getSigningCosmWasmClient, address }: any = useChain(CHAIN_NAME);
@@ -11,9 +12,12 @@ export default function useResetCount() {
   const mutation = useMutation({
     mutationFn: async (payload: { count: number }) => {
       if (!address) {
-        return;
+        throw new Error("No address found");
       }
-      console.log("Payload:", payload);
+      toast("Approve transaction", {
+        icon: <Loader className=" animate-spin" />,
+      });
+
       const client = await getSigningCosmWasmClient();
       const queryClient = new CwPryzmClient(client, address, CONTRACT_ADDRESS);
       const fee = {
@@ -26,7 +30,15 @@ export default function useResetCount() {
 
       return await queryClient.reset(payload, fee);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["count"] }),
+    onSuccess: () => {
+      toast.success("Transaction Withdraw funds successfully");
+
+      return queryClient.invalidateQueries({ queryKey: ["count"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      console.error("Error incrementing count", error);
+    },
   });
   return mutation;
 }

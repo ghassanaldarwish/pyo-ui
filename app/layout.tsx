@@ -7,7 +7,6 @@ import ChainProvider from "@/components/chains-provider";
 import QueryProvider from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { ContractsProvider } from "@/components/contracts-context";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -38,14 +37,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <QueryProvider>
-            <ChainProvider>
-              <ContractsProvider>
-                {children}
-                <Toaster position="top-right" />
-              </ContractsProvider>
-            </ChainProvider>
-          </QueryProvider>
+          <ChainProvider>
+            <QueryProvider>
+              {children}
+              <Toaster position="top-right" />
+            </QueryProvider>
+          </ChainProvider>
         </ThemeProvider>
       </body>
     </html>

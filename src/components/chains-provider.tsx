@@ -20,7 +20,7 @@ function ChainProvider({
   useEffect(() => {
     // @ts-ignore
     if (window !== undefined && process.env.NODE_ENV === "development") {
-      addKeplr();
+      // addKeplr();
     }
   }, []);
 

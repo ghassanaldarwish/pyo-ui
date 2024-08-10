@@ -14,3 +14,12 @@ export function getChainLogo(name: string) {
   const chain = chains.find((chain) => chain.chain_name === name);
   return chain ? getLogo(chain) : null;
 }
+
+export const queryClientOptions = {
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      // staleTime: 60 * 1000,
+    },
+  },
+};

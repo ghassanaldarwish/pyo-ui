@@ -1,9 +1,15 @@
 "use client";
+import { GasPrice } from "@cosmjs/stargate";
 
 import { SignerOptions, wallets } from "cosmos-kit";
 import { ChainProvider as Provider } from "@cosmos-kit/react";
 import { assets, chains } from "chain-registry";
-
+import { CHAIN_PRYZM_RPC } from "@/config/defaults";
+import { useEffect } from "react";
+import addKeplr, {
+  chainPryzmInfo,
+  chainPryzmAssets,
+} from "@/lib/pryzm-localnet";
 function ChainProvider({
   children,
 }: Readonly<{
@@ -11,17 +17,32 @@ function ChainProvider({
 }>) {
   // const { themeClass } = useTheme();
 
+  useEffect(() => {
+    // @ts-ignore
+    if (window !== undefined && process.env.NODE_ENV === "development") {
+      addKeplr();
+    }
+  }, []);
+
   const signerOptions: SignerOptions = {
     // signingStargate: () => {
     //   return getSigningCosmosClientOptions();
     // }
+    signingCosmwasm: (chain: any) => {
+      switch (chain.chain_name) {
+        case "pryzmtestnet":
+          return {
+            gasPrice: GasPrice.fromString("0.5upryzm"),
+          };
+      }
+    },
   };
 
   return (
     <div>
       <Provider
-        chains={chains}
-        assetLists={assets}
+        chains={[...chains, chainPryzmInfo]}
+        assetLists={[...assets, chainPryzmAssets]}
         wallets={wallets}
         walletConnectOptions={{
           signClient: {
@@ -37,6 +58,13 @@ function ChainProvider({
         }}
         // @ts-ignore
         signerOptions={signerOptions}
+        endpointOptions={{
+          // @ts-ignore
+          pryzmtestnet: {
+            rpc: [CHAIN_PRYZM_RPC],
+            rest: [CHAIN_PRYZM_RPC],
+          },
+        }}
       >
         {children}
       </Provider>

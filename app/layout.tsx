@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "@interchain-ui/react/styles";
-
 import "@/styles/globals.css";
-import ChainProvider from "@/components/cosmos-provider";
+import ChainProvider from "@/components/chains-provider";
+import QueryProvider from "@/components/query-provider";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { ContractsProvider } from "@/components/contracts-context";
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -28,7 +32,21 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ChainProvider>{children}</ChainProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <ChainProvider>
+              <ContractsProvider>
+                {children}
+                <Toaster position="top-right" />
+              </ContractsProvider>
+            </ChainProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

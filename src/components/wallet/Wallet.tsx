@@ -1,6 +1,5 @@
 "use client";
 
-import { ClipboardCopyText } from "@interchain-ui/react";
 import { WalletStatus } from "cosmos-kit";
 import { useChain } from "@cosmos-kit/react";
 import { getChainLogo } from "@/lib/utils";
@@ -17,6 +16,8 @@ import {
   ButtonNotExist,
   ButtonRejected,
 } from "./Connect";
+import { useCwPryzmIncrementMutation } from "@/config/contracts/CwPryzm.react-query";
+import { useContracts } from "../contracts-context";
 
 export function Wallet() {
   const {
@@ -39,6 +40,18 @@ export function Wallet() {
     [WalletStatus.NotExist]: <ButtonNotExist onClick={openView} />,
   }[status] || <ButtonConnect onClick={connect} />;
 
+  const { cwPryzmQueryClient, cwPryzmClient } = useContracts();
+  // const mutation = useCwPryzmIncrementMutation();
+
+  console.log("cwPryzmQueryClient", cwPryzmQueryClient);
+  console.log("cwPryzmClient", cwPryzmClient);
+
+  const increment = () => {
+    // if (client) {
+    //   mutation.mutate({ client });
+    // }
+  };
+
   return (
     <div>
       <Chain
@@ -47,7 +60,7 @@ export function Wallet() {
       ></Chain>
 
       {username ? <User name={username} /> : null}
-      {address ? <ClipboardCopyText text={address} truncate="middle" /> : null}
+      {address ? <div className="border p-2">{address}</div> : null}
       {ConnectButton}
 
       {message &&

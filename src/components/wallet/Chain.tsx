@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-// import { Box, Stack, Text, useColorModeValue } from "@interchain-ui/react";
 
 export type ChainProps = {
   name: string;

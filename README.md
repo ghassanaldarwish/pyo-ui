@@ -20,3 +20,10 @@ User interaction, deposit management, and portfolio display. Handles business lo
 
   - User Deposits Funds: The user deposits ATOM via the frontend UI.
   - Message to Smart Contract (SC): The frontend sends a message to the smart contract (SC) to handle the deposit.
+
+### API
+
+pryzmtestnet:
+
+- [API](https://testnet-api.pryzm.zone)
+- [RPC](https://testnet-rpc.pryzm.zone)

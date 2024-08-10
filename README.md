@@ -27,3 +27,7 @@ pryzmtestnet:
 
 - [API](https://testnet-api.pryzm.zone)
 - [RPC](https://testnet-rpc.pryzm.zone)
+
+## Live Demo
+
+- [Pryzm yield](https://pryzm-yield-test-qfdx9zdd6-ghassan-aldarwishs-projects.vercel.app/)

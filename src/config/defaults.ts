@@ -7,4 +7,4 @@ export const CHAIN_PRYZM_API = "https://testnet-api.pryzm.zone";
 
 // contractAddress
 export const CONTRACT_ADDRESS =
-  "pryzm17nkhw5z03gwrg6pefz9ucxdaea0amv7jueyv9r6a8228y3jr0sdshcuw6w";
+  "pryzm1qhtkvc5a6aef047v6ljzvfkmuh7qg3rzn06rmjnc9pqjuu6anhzsknjqj6";

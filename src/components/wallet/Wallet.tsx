@@ -2,6 +2,40 @@
 
 import { WalletStatus } from "cosmos-kit";
 import { useChain } from "@cosmos-kit/react";
+import { CHAIN_NAME } from "@/config";
+
+import {
+  ButtonConnect,
+  ButtonConnected,
+  ButtonConnecting,
+  ButtonDisconnected,
+  ButtonError,
+  ButtonNotExist,
+  ButtonRejected,
+} from "./Connect";
+
+export function Wallet() {
+  const { status, address, connect, openView } = useChain(CHAIN_NAME);
+
+  const ConnectButton = {
+    [WalletStatus.Connected]: (
+      <ButtonConnected text={address?.slice(0, 20)} onClick={openView} />
+    ),
+    [WalletStatus.Connecting]: <ButtonConnecting />,
+    [WalletStatus.Disconnected]: <ButtonDisconnected onClick={connect} />,
+    [WalletStatus.Error]: <ButtonError onClick={openView} />,
+    [WalletStatus.Rejected]: <ButtonRejected onClick={connect} />,
+    [WalletStatus.NotExist]: <ButtonNotExist onClick={openView} />,
+  }[status] || <ButtonConnect onClick={connect} />;
+
+  return ConnectButton;
+}
+
+/**
+ "use client";
+
+import { WalletStatus } from "cosmos-kit";
+import { useChain } from "@cosmos-kit/react";
 import { getChainLogo } from "@/lib/utils";
 import { CHAIN_NAME } from "@/config";
 import { User } from "./User";
@@ -89,3 +123,4 @@ export function Wallet() {
     </div>
   );
 }
+ */

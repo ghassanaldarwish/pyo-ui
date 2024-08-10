@@ -1,14 +1,13 @@
-import { Wallet } from "@/components";
 import Navbar from "@/components/navbar";
-import Image from "next/image";
+import TransactionsForm from "@/components/transactions-form";
 
-export default function Home() {
+export default function Dashboard() {
   return (
-    <>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <Navbar />
-        <Wallet />
+    <div className="flex min-h-screen w-full flex-col ">
+      <Navbar />
+      <main className="flex flex-1 flex-col justify-center items-center gap-4 p-4 md:gap-8 md:p-8 ">
+        <TransactionsForm />
       </main>
-    </>
+    </div>
   );
 }

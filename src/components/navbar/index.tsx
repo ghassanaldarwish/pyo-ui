@@ -38,6 +38,12 @@ export default function Navbar() {
         >
           About
         </Link>
+        <Link
+          href="#"
+          className="text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Roadmap
+        </Link>
       </nav>
       <Sheet>
         <SheetTrigger asChild>

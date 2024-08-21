@@ -5,9 +5,9 @@ User interaction, deposit management, and portfolio display. Handles business lo
 ### Tasks
 
 - [] User can connect their wallet to the application (Keplr, Ledger, etc.)
-- [] User should be able to select token to deposit. (deposit to smart contract? or Pryzm)
+- [] User should be able to select token to deposit to our smart contract in Pryzm
 - [] User should be able to see their portfolio
-- [] User should be able withdraw their funds (to their wallet)
+- [] User should be able withdraw their funds
 
 ## Examples
 
